@@ -8,8 +8,7 @@ export default function InstructionScreen({ onNext }: { onNext: () => void }) {
 
         <div className="text-base text-gray-800 space-y-6 leading-relaxed">
           <p>
-            Bacalah setiap pernyataan dan pilih jawaban dari angka{" "}
-            yang paling sesuai dengan kondisi
+            Bacalah setiap pernyataan dan pilih jawaban yang paling sesuai dengan kondisi
             Anda selama <strong>seminggu terakhir</strong>.
           </p>
           <p>
@@ -18,28 +17,16 @@ export default function InstructionScreen({ onNext }: { onNext: () => void }) {
           </p>
 
           <div className="text-left inline-block text-[16px] space-y-2">
-            <p>
-              <strong>0</strong>: Tidak sesuai sama sekali –{" "}
-              <strong>TIDAK PERNAH</strong>
-            </p>
-            <p>
-              <strong>1</strong>: Sesuai pada tingkat tertentu –{" "}
-              <strong>KADANG-KADANG</strong>
-            </p>
-            <p>
-              <strong>2</strong>: Sesuai pada tingkat cukup besar –{" "}
-              <strong>SERING</strong>
-            </p>
-            <p>
-              <strong>3</strong>: Sangat sesuai / hampir selalu –{" "}
-              <strong>HAMPIR SELALU</strong>
-            </p>
+            <p><strong>TIDAK PERNAH</strong>: Tidak sesuai sama sekali</p>
+            <p><strong>KADANG-KADANG</strong>: Sesuai pada tingkat tertentu</p>
+            <p><strong>SERING</strong>: Sesuai pada tingkat cukup besar</p>
+            <p><strong>HAMPIR SELALU</strong>: Sangat sesuai / hampir selalu</p>
           </div>
         </div>
 
         <button
           onClick={onNext}
-          className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-8 rounded-lg text-lg shadow"
+          className="bg-teal-500 hover:bg-teal-600 text-white font-semibold py-2 px-6 rounded-lg shadow-lg"
         >
           MULAI
         </button>

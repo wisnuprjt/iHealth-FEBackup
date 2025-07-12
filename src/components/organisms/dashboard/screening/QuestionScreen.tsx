@@ -33,56 +33,58 @@ export default function QuestionScreen({ onFinish }: QuestionScreenProps) {
   const [answers, setAnswers] = useState<number[]>(Array(21).fill(-1));
   const current = questions[index];
 
+  const options = ["TIDAK PERNAH", "KADANG-KADANG", "SERING", "HAMPIR SELALU"];
+
   return (
-    <div className="max-w-3xl mx-auto mt-12 text-center">
-      <p className="mb-4 text-lg font-medium">
-        {index + 1}. {current.text}
-      </p>
+    <div className="flex justify-center items-center min-h-[80vh] px-4">
+      <div className="max-w-2xl w-full text-center space-y-8">
+        <p className="text-lg font-medium">
+          {index + 1}. {current.text}
+        </p>
 
-      {[0, 1, 2, 3].map((val) => (
-        <button
-          key={val}
-          className={`block w-full py-2 px-4 my-2 rounded-md border ${
-            answers[index] === val ? "bg-blue-600 text-white" : "bg-gray-100"
-          }`}
-          onClick={() => {
-            const updated = [...answers];
-            updated[index] = val;
-            setAnswers(updated);
-          }}
-        >
-          {val === 0
-            ? "TIDAK PERNAH"
-            : val === 1
-            ? "KADANG-KADANG"
-            : val === 2
-            ? "SERING"
-            : "HAMPIR SELALU"}
-        </button>
-      ))}
+        <div className="space-y-3">
+          {options.map((label, val) => (
+            <button
+              key={val}
+              className={`block w-full py-3 px-6 rounded-lg border font-medium transition ${
+                answers[index] === val
+                  ? "bg-emerald-600 text-white shadow-md"
+                  : "bg-gray-100 hover:bg-gray-200"
+              }`}
+              onClick={() => {
+                const updated = [...answers];
+                updated[index] = val;
+                setAnswers(updated);
+              }}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
 
-      <div className="flex justify-between mt-6">
-        <button
-          disabled={index === 0}
-          onClick={() => setIndex(index - 1)}
-          className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded disabled:opacity-50"
-        >
-          KEMBALI
-        </button>
+        <div className="flex justify-between mt-6">
+          <button
+            disabled={index === 0}
+            onClick={() => setIndex(index - 1)}
+            className="bg-gray-300 hover:bg-gray-400 text-black font-semibold px-6 py-2 rounded disabled:opacity-50"
+          >
+            KEMBALI
+          </button>
 
-        <button
-          disabled={answers[index] === -1}
-          className="bg-pink-500 hover:bg-pink-600 text-white px-6 py-2 rounded disabled:opacity-50"
-          onClick={() => {
-            if (index < 20) {
-              setIndex(index + 1);
-            } else {
-              onFinish(answers);
-            }
-          }}
-        >
-          {index === 20 ? "SELESAI" : "BERIKUTNYA"}
-        </button>
+          <button
+            disabled={answers[index] === -1}
+            onClick={() => {
+              if (index < 20) {
+                setIndex(index + 1);
+              } else {
+                onFinish(answers);
+              }
+            }}
+            className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-6 py-2 rounded disabled:opacity-50"
+          >
+            {index === 20 ? "SELESAI" : "BERIKUTNYA"}
+          </button>
+        </div>
       </div>
     </div>
   );

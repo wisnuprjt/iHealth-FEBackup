@@ -202,6 +202,17 @@ const isCompleted =
                               </Link>
                             </SidebarMenuButton>
                           </SidebarMenuItem>
+                            <SidebarMenuItem>
+                            <SidebarMenuButton
+                              asChild
+                              className={buttonClass("/dashboard/screening")}
+                            >
+                              <Link href="/dashboard/screening">
+                                <HeartPulse />
+                                <span>Kesehatan Mental DASS </span>
+                              </Link>
+                            </SidebarMenuButton>
+                          </SidebarMenuItem>
                         </>
                       )}
                     </SidebarMenu>
