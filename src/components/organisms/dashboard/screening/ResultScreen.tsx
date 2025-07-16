@@ -61,17 +61,17 @@ const descriptions: Record<"Depresi" | "Kecemasan" | "Stres", Record<Level, stri
   },
   Kecemasan: {
     Normal: "Tidak ditemukan gejala kecemasan signifikan; individu berada dalam keadaan tenang secara fisiologis dan emosional.",
-    Ringan: "Terdapat gejala kecemasan ringan seperti kegelisahan, kekhawatiran sosial, atau kewaspadaan berlebih, namun belum mengganggu fungsi sehari-hari secara signifikan.",
-    Sedang: "Gejala kecemasan mulai meningkat dan dapat mencakup gejala fisik (seperti jantung berdebar) atau pikiran yang overaktif. Disarankan untuk meningkatkan pola hidup sehat dan pola pikir positif.",
-    Parah: "Kecemasan berat yang mengganggu aktivitas sehari-hari. Disarankan menerapkan strategi coping atau konsultasi dengan profesional.",
-    "Sangat Parah": "Kecemasan sangat berat yang berpotensi mengganggu kehidupan, pekerjaan, dan relasi sosial; membutuhkan intervensi psikologis segera.",
+    Ringan: "Terdapat gejala kecemasan ringan seperti kegelisahan, kekhawatiran sosial, atau kewaspadaan berlebih, namun gejala ini masih dalam batas normal dan belum mengganggu fungsi sehari-hari secara signifikan.",
+    Sedang: "Gejala kecemasan mulai meningkat dan dapat mencakup gejala fisik (seperti jantung berdebar) atau pikiran yang overaktif. Disarankan untuk mengambil tindakan pencegahan seperti meningkatkan pola hidup sehat dan pola pikir positif.",
+    Parah: "Kecemasan berat yang mungkin muncul dalam bentuk kepanikan, kesulitan relaksasi, atau ketegangan yang berkepanjangan yang mengganggu aktivitas sehari-hari. Disarankan untuk mulai menerapkan strategi coping efektif seperti relaksasi untuk mengelola kecemasan atau konsultasi dengan profesional.",
+    "Sangat Parah": "Kecemasan sangat berat yang berpotensi mengganggu kehidupan sehari-hari, pekerjaan, dan relasi sosial, serta membutuhkan intervensi psikologis dan penanganan profesional.",
   },
   Stres: {
-    Normal: "Tidak terdeteksi gejala signifikan. Menandakan kemampuan adaptif yang baik dalam menghadapi tuntutan lingkungan.",
-    Ringan: "Stres ringan ditandai sedikit ketegangan atau kesulitan konsentrasi, tapi belum mengganggu fungsi secara signifikan.",
-    Sedang: "Indikasi stres sedang yang dapat memengaruhi performa dan keseimbangan emosional. Disarankan mengelola stres seperti menjaga pola hidup sehat.",
-    Parah: "Tingkat stres tinggi yang menyebabkan emosi tidak stabil, gangguan tidur, dan kegelisahan. Disarankan teknik relaksasi dan mulai berkonsultasi.",
-    "Sangat Parah": "Gejala stres sangat berat dan berdampak luas terhadap fungsi sehari-hari; sangat dianjurkan berkonsultasi dengan tenaga profesional.",
+    Normal: "Tidak terdeteksi gejala signifikan, menandakan adanya kemampuan adaptif yang baik dalam menghadapi tuntutan lingkungan.",
+    Ringan: "Stres ringan ditandai dengan sedikit ketegangan atau kesulitan konsentrasi, tetapi belum mengganggu fungsi sehari-hari secara signifikan.",
+    Sedang: "Indikasi stres sedang yang dapat memengaruhi performa dan keseimbangan emosional, namun masih dapat dikendalikan dengan pengelolaan stres yang baik. Disarankan untuk mengambil langkah-langkah dalam mengelola stres seperti menjaga pola hidup sehat.",
+    Parah: "Tingkat stres tinggi yang dapat menyebabkan emosi tidak stabil, gangguan tidur, dan kegelisahan berkepanjangan. Disarankan untuk menerapkan strategi mengelola stres dengan lebih efektif, misalnya dengan relaksasi, mendengarkan musik, dan mulai berkonsultasi dengan profesional.",
+    "Sangat Parah": "Gejala stres sangat berat yang berdampak luas terhadap fungsi sehari-hari dan kesejahteraan psikologis; sangat dianjurkan untuk berkonsultasi dengan tenaga profesional.",
   }
 };
 
