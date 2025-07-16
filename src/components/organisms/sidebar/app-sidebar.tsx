@@ -468,6 +468,19 @@ const isCompleted =
               </SidebarGroup>
             )}
 
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                asChild
+                className={buttonClass("/dashboard/screening/history")}
+              >
+                <Link href="/dashboard/screening/history">
+                  <SearchCheck />
+                  <span>Riwayat Screening DASS</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+
+
             <SidebarGroup>
               <SidebarGroupLabel>Pengaturan Akun</SidebarGroupLabel>
               <SidebarGroupContent>

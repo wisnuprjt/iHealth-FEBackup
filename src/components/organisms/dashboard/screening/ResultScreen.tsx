@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Chart as ChartJS,
   ArcElement,
@@ -5,15 +7,14 @@ import {
   Legend,
 } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
-
-ChartJS.register(ArcElement, Tooltip, Legend);
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { submitScreeningDass } from "@/lib/screeningDass";
 
 interface ResultScreenProps {
   answers: number[] | null;
   onRestart: () => void;
 }
-
-type Level = "Normal" | "Ringan" | "Sedang" | "Parah" | "Sangat Parah";
 
 const questionTypeMap: ("Depresi" | "Kecemasan" | "Stres")[] = [
   "Depresi", "Depresi", "Depresi", "Depresi", "Depresi", "Depresi", "Depresi",
@@ -21,31 +22,34 @@ const questionTypeMap: ("Depresi" | "Kecemasan" | "Stres")[] = [
   "Stres", "Stres", "Stres", "Stres", "Stres", "Stres", "Stres",
 ];
 
-function interpret(score: number, type: "Depresi" | "Kecemasan" | "Stres"): Level {
-  const s = score * 2;
+ChartJS.register(ArcElement, Tooltip, Legend);
+
+function interpret(score: number, type: "Depresi" | "Kecemasan" | "Stres") {
   if (type === "Depresi") {
-    if (s <= 4) return "Normal";
-    if (s <= 6) return "Ringan";
-    if (s <= 10) return "Sedang";
-    if (s <= 13) return "Parah";
+    if (score <= 4) return "Normal";
+    if (score <= 6) return "Ringan";
+    if (score <= 10) return "Sedang";
+    if (score <= 13) return "Parah";
     return "Sangat Parah";
   }
   if (type === "Kecemasan") {
-    if (s <= 3) return "Normal";
-    if (s <= 5) return "Ringan";
-    if (s <= 7) return "Sedang";
-    if (s <= 9) return "Parah";
+    if (score <= 3) return "Normal";
+    if (score <= 5) return "Ringan";
+    if (score <= 7) return "Sedang";
+    if (score <= 9) return "Parah";
     return "Sangat Parah";
   }
   if (type === "Stres") {
-    if (s <= 7) return "Normal";
-    if (s <= 9) return "Ringan";
-    if (s <= 12) return "Sedang";
-    if (s <= 16) return "Parah";
+    if (score <= 7) return "Normal";
+    if (score <= 9) return "Ringan";
+    if (score <= 12) return "Sedang";
+    if (score <= 16) return "Parah";
     return "Sangat Parah";
   }
   return "Normal";
 }
+
+type Level = "Normal" | "Ringan" | "Sedang" | "Parah" | "Sangat Parah";
 
 const descriptions: Record<"Depresi" | "Kecemasan" | "Stres", Record<Level, string>> = {
   Depresi: {
@@ -57,35 +61,31 @@ const descriptions: Record<"Depresi" | "Kecemasan" | "Stres", Record<Level, stri
   },
   Kecemasan: {
     Normal: "Tidak ditemukan gejala kecemasan signifikan; individu berada dalam keadaan tenang secara fisiologis dan emosional.",
-    Ringan: "Terdapat gejala kecemasan ringan seperti kegelisahan, kekhawatiran sosial, atau kewaspadaan berlebih, namun gejala ini masih dalam batas normal dan belum mengganggu fungsi sehari-hari secara signifikan.",
-    Sedang: "Gejala kecemasan mulai meningkat dan dapat mencakup gejala fisik (seperti jantung berdebar) atau pikiran yang overaktif. Disarankan untuk mengambil tindakan pencegahan seperti meningkatkan pola hidup sehat dan pola pikir positif.",
-    Parah: "Kecemasan berat yang mungkin muncul dalam bentuk kepanikan, kesulitan relaksasi, atau ketegangan yang berkepanjangan yang mengganggu aktivitas sehari-hari. Disarankan untuk mulai menerapkan strategi coping efektif seperti relaksasi untuk mengelola kecemasan atau konsultasi dengan profesional.",
-    "Sangat Parah": "Kecemasan sangat berat yang berpotensi mengganggu kehidupan sehari-hari, pekerjaan, dan relasi sosial, serta membutuhkan intervensi psikologis dan penanganan profesional.",
+    Ringan: "Terdapat gejala kecemasan ringan seperti kegelisahan, kekhawatiran sosial, atau kewaspadaan berlebih, namun belum mengganggu fungsi sehari-hari secara signifikan.",
+    Sedang: "Gejala kecemasan mulai meningkat dan dapat mencakup gejala fisik (seperti jantung berdebar) atau pikiran yang overaktif. Disarankan untuk meningkatkan pola hidup sehat dan pola pikir positif.",
+    Parah: "Kecemasan berat yang mengganggu aktivitas sehari-hari. Disarankan menerapkan strategi coping atau konsultasi dengan profesional.",
+    "Sangat Parah": "Kecemasan sangat berat yang berpotensi mengganggu kehidupan, pekerjaan, dan relasi sosial; membutuhkan intervensi psikologis segera.",
   },
   Stres: {
-    Normal: "Tidak terdeteksi gejala signifikan, menandakan adanya kemampuan adaptif yang baik dalam menghadapi tuntutan lingkungan.",
-    Ringan: "Stres ringan ditandai dengan sedikit ketegangan atau kesulitan konsentrasi, tetapi belum mengganggu fungsi sehari-hari secara signifikan.",
-    Sedang: "Indikasi stres sedang yang dapat memengaruhi performa dan keseimbangan emosional, namun masih dapat dikendalikan dengan pengelolaan stres yang baik. Disarankan untuk mengambil langkah-langkah dalam mengelola stres seperti menjaga pola hidup sehat.",
-    Parah: "Tingkat stres tinggi yang dapat menyebabkan emosi tidak stabil, gangguan tidur, dan kegelisahan berkepanjangan. Disarankan untuk menerapkan strategi mengelola stres dengan lebih efektif, misalnya dengan relaksasi, mendengarkan musik, dan mulai berkonsultasi dengan profesional.",
-    "Sangat Parah": "Gejala stres sangat berat yang berdampak luas terhadap fungsi sehari-hari dan kesejahteraan psikologis; sangat dianjurkan untuk berkonsultasi dengan tenaga profesional.",
-  },
-};
-
-const icons: Record<Level, string> = {
-  Normal: "😀",
-  Ringan: "🙂",
-  Sedang: "😐",
-  Parah: "😟",
-  "Sangat Parah": "😢",
+    Normal: "Tidak terdeteksi gejala signifikan. Menandakan kemampuan adaptif yang baik dalam menghadapi tuntutan lingkungan.",
+    Ringan: "Stres ringan ditandai sedikit ketegangan atau kesulitan konsentrasi, tapi belum mengganggu fungsi secara signifikan.",
+    Sedang: "Indikasi stres sedang yang dapat memengaruhi performa dan keseimbangan emosional. Disarankan mengelola stres seperti menjaga pola hidup sehat.",
+    Parah: "Tingkat stres tinggi yang menyebabkan emosi tidak stabil, gangguan tidur, dan kegelisahan. Disarankan teknik relaksasi dan mulai berkonsultasi.",
+    "Sangat Parah": "Gejala stres sangat berat dan berdampak luas terhadap fungsi sehari-hari; sangat dianjurkan berkonsultasi dengan tenaga profesional.",
+  }
 };
 
 function getColor(level: Level) {
-  if (level === "Normal") return { text: "text-green-600", chart: "#22c55e" };
-  if (level === "Ringan" || level === "Sedang") return { text: "text-orange-500", chart: "#f97316" };
-  return { text: "text-red-600", chart: "#ef4444" };
+  if (level === "Normal") return { text: "text-green-600", chart: "#22c55e", emoji: "😀" };
+  if (level === "Ringan") return { text: "text-yellow-500", chart: "#eab308", emoji: "🙂" };
+  if (level === "Sedang") return { text: "text-orange-500", chart: "#f97316", emoji: "😐" };
+  if (level === "Parah") return { text: "text-red-500", chart: "#ef4444", emoji: "😟" };
+  return { text: "text-red-700", chart: "#b91c1c", emoji: "😢" };
 }
 
 export default function ResultScreen({ answers, onRestart }: ResultScreenProps) {
+  const router = useRouter();
+
   if (!answers) return null;
 
   let depresi = 0, kecemasan = 0, stres = 0;
@@ -97,11 +97,7 @@ export default function ResultScreen({ answers, onRestart }: ResultScreenProps) 
     if (tipe === "Stres") stres += val;
   });
 
-  const skor = {
-    Depresi: depresi * 2,
-    Kecemasan: kecemasan * 2,
-    Stres: stres * 2,
-  };
+  const skor = { Depresi: depresi, Kecemasan: kecemasan, Stres: stres };
 
   const interpretasi = {
     Depresi: interpret(depresi, "Depresi"),
@@ -109,11 +105,23 @@ export default function ResultScreen({ answers, onRestart }: ResultScreenProps) 
     Stres: interpret(stres, "Stres"),
   };
 
+  // ⬇️ Submit otomatis saat halaman ini muncul
+  useEffect(() => {
+    const payload = {
+      answers,
+      interpretation: interpretasi,
+    };
+
+    submitScreeningDass(payload)
+      .then(() => console.log("✅ Data berhasil disimpan"))
+      .catch((err) => console.error("❌ Gagal simpan:", err));
+  }, []);
+
   const chartConfig = (value: number, color: string) => ({
     labels: [],
     datasets: [
       {
-        data: [value, 42 - value],
+        data: [value, 21 - value],
         backgroundColor: [color, "#e5e7eb"],
         borderWidth: 0,
         cutout: "70%",
@@ -127,9 +135,8 @@ export default function ResultScreen({ answers, onRestart }: ResultScreenProps) 
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 justify-center">
         {(["Depresi", "Kecemasan", "Stres"] as const).map((dimensi) => {
-          const level = interpretasi[dimensi];
+          const level = interpretasi[dimensi] as Level;
           const color = getColor(level);
-
           return (
             <div key={dimensi} className="space-y-2">
               <h4 className="font-semibold">{dimensi}:</h4>
@@ -147,16 +154,14 @@ export default function ResultScreen({ answers, onRestart }: ResultScreenProps) 
 
       <div className="space-y-6 text-left max-w-3xl mx-auto">
         {(["Depresi", "Kecemasan", "Stres"] as const).map((dimensi) => {
-          const level = interpretasi[dimensi];
+          const level = interpretasi[dimensi] as Level;
           const color = getColor(level);
-
           return (
             <div key={dimensi} className="flex gap-3 items-start">
-              <span className="text-3xl">{icons[level]}</span>
+              <span className="text-3xl">{color.emoji}</span>
               <div>
                 <h5 className="font-bold mb-1">
-                  {dimensi}:{" "}
-                  <span className={`${color.text}`}>{level}</span>
+                  {dimensi}: <span className={color.text}>{level}</span>
                 </h5>
                 <p className={`text-sm ${color.text}`}>
                   {descriptions[dimensi][level]}
@@ -169,9 +174,9 @@ export default function ResultScreen({ answers, onRestart }: ResultScreenProps) 
 
       <button
         onClick={onRestart}
-        className="mt-8 bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded shadow"
+        className="mt-8 bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded shadow"
       >
-        RETURN
+        KEMBALI KE BERANDA
       </button>
     </div>
   );
